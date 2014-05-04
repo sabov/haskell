@@ -30,4 +30,7 @@ publishedIn year books = filter (\book -> case date book of
                                     (_, _, currYear) -> year == currYear
                                 ) books
 
-main = print $ publishedIn 1984 [breakingNews, snowden, futureShock]
+totalPages :: [Book] -> Int
+totalPages books = foldr (\book acc -> pages book + acc) 0 books
+
+main = print $ totalPages[breakingNews, snowden, futureShock]
