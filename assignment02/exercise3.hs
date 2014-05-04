@@ -25,6 +25,9 @@ breakingNews = ABook Novel ("Schaetzing", "Frank") "Breaking News" (06, 03, 2014
 snowden = ABook Nonfiction ("Harding", "Luke") "The Snowden Files" (06, 02, 2014) 346
 futureShock = ABook Nonfiction ("Toffler", "Alvin") "Future Shock" (01, 06, 1984) 576
 
+genreOf :: Genre -> [Book] -> [Book]
+genreOf g books = filter(\book -> g == genre book) books
+
 publishedIn :: Int -> [Book] -> [Book]
 publishedIn year books = filter (\book -> case date book of
                                     (_, _, currYear) -> year == currYear
@@ -37,6 +40,9 @@ toAuthor :: [Book] -> [Name]
 toAuthor books = map (\book -> author book) books
 
 titlesOf :: Genre -> [Book] -> [String]
-titlesOf g books = map title . filter(\book -> g == genre book) $ books
+titlesOf g books = map title $ genreOf g books
 
-main = print $ titlesOf Nonfiction [breakingNews, snowden, futureShock]
+pagesOf :: Genre -> [Book] -> Int
+pagesOf g books = totalPages $ genreOf g books
+
+main = print $ pagesOf Nonfiction [breakingNews, snowden, futureShock]
