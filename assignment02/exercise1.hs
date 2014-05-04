@@ -1,7 +1,6 @@
-data Tree = Leaf [Int]
-    | Node [(Tree, Int)] deriving (Show)
+data IndexedTree a = Leaf [a] | Node [(IndexedTree a, a)] deriving (Show)
 
-myTree :: Tree
+myTree :: IndexedTree Int
 myTree = Node
             [
                 (Node
@@ -18,4 +17,11 @@ myTree = Node
                     ],
                 32)
             ]
-main = print myTree
+
+treeToList :: IndexedTree a -> [a]
+treeToList (Leaf x) = x
+treeToList (Node x) = foldl (\acc el -> case el of
+                                (subTree, _) -> acc ++ treeToList subTree
+                            ) [] x
+
+main = print $ treeToList myTree
