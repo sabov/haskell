@@ -33,4 +33,7 @@ publishedIn year books = filter (\book -> case date book of
 totalPages :: [Book] -> Int
 totalPages books = foldr (\book acc -> pages book + acc) 0 books
 
-main = print $ totalPages[breakingNews, snowden, futureShock]
+toAuthor :: [Book] -> [Name]
+toAuthor books = map (\book -> author book) books
+
+main = print $ toAuthor[breakingNews, snowden, futureShock]
