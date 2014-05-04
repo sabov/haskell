@@ -36,4 +36,7 @@ totalPages books = foldr (\book acc -> pages book + acc) 0 books
 toAuthor :: [Book] -> [Name]
 toAuthor books = map (\book -> author book) books
 
-main = print $ toAuthor[breakingNews, snowden, futureShock]
+titlesOf :: Genre -> [Book] -> [String]
+titlesOf g books = map title . filter(\book -> g == genre book) $ books
+
+main = print $ titlesOf Nonfiction [breakingNews, snowden, futureShock]
