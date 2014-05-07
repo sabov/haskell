@@ -32,6 +32,17 @@ contains num (Node x) = forEachTwoElements (\a b -> case a of
                                                                 then contains num subTree1
                                                                 else False
                                            ) x
+                                          
+-- Added By Tanmaya 
+contains :: Ord a => a -> IndexedTree a -> Bool
+contains e (Leaf xs) = elem e xs
+contains e (Node ((t1,n1):(t2,n2):xs))
+    | e < n1    = False
+    | e == n1   = True
+    | e < n2    = contains e t1
+    | otherwise = contains e (Node ((t2, n2):xs))
+                                           
+                                           
 
 
 forEachTwoElements :: (a -> a -> b) -> [a] -> [b]
