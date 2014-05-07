@@ -30,17 +30,13 @@ treeToList (Node x) = foldl (\acc el -> case el of
                                 (subTree, _) -> acc ++ treeToList subTree
                             ) [] x
 
-getSubTreeByIndex :: Ord a => a -> IndexedTree a -> IndexedTree a
-getSubTreeByIndex num (Leaf list) = Leaf list
-getSubTreeByIndex num (Node list) = (\tree -> case tree of
+cont :: Ord a => a -> IndexedTree a -> Bool
+cont num (Leaf list) = elem num list
+cont num (Node list) = cont num $ (\tree -> case tree of
                                         (subTree, num) -> subTree
                                     ) $ last $ filter (\node -> case node of
                                          (subTree, index) -> index <= num
                                     ) list
-
-cont :: Ord a => a -> IndexedTree a -> Bool
-cont num (Leaf list) = elem num list
-cont num tree = cont num $ getSubTreeByIndex num tree
 
 -- Added By Tanmaya
 contains :: Ord a => a -> IndexedTree a -> Bool
