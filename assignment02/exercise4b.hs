@@ -13,18 +13,13 @@ myTree = AMultTree 8 [
 mean :: Int -> Int -> Int
 mean x y = (x + y) `div` 2
     
-getElements :: MultTree Int -> [Int]
+getElements :: MultTree a -> [a]
 getElements (AMultTree num []) = [num]
-getElements (AMultTree num list) = (\acc el -> case el of
-                                (x:[]) -> num:acc ++ getElements x 
-				(x:xs:[]) -> num:acc ++ getElements x ++ getElements xs 
-				(x:xs:xss) -> num:acc ++ getElements x ++ getElements xs ++ (\(x:_) -> acc ++ getElements x) xss
-                            ) [] list
+getElements (AMultTree num list) = num:foldl (\acc subTree -> acc ++ getElements subTree) [] list
 
 depthFirstFold :: (Int -> Int -> int) -> Int -> MultTree Int -> Int
 depthFirstFold fn x y = foldl mean x (getElements y)
-    
-    
+
 --Call to check if the computed List is OK
 --main = print $ getElements myTree
 
