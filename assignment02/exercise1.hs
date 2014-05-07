@@ -15,7 +15,13 @@ myTree = Node
                         (Leaf [32, 43, 98], 32),
                         (Leaf [101], 101)
                     ],
-                32)
+                32),
+                (Node
+                    [
+                        (Leaf [132, 143, 198], 132),
+                        (Leaf [1101], 1101)
+                    ],
+                132)
             ]
 
 treeToList :: IndexedTree a -> [a]
@@ -24,30 +30,26 @@ treeToList (Node x) = foldl (\acc el -> case el of
                                 (subTree, _) -> acc ++ treeToList subTree
                             ) [] x
 
-contains :: Ord a => a -> IndexedTree a -> Bool
-contains num (Leaf x) = elem num x
-contains num (Node x) = forEachTwoElements (\a b -> case a of
-                                                (subTree1, index1) -> case b of
-                                                    (subTree2, index2) -> if num >= index1 && num < index2
-                                                                then contains num subTree1
-                                                                else False
-                                           ) x
-                                          
--- Added By Tanmaya 
+getSubTreeByIndex :: Ord a => a -> IndexedTree a -> IndexedTree a
+getSubTreeByIndex num (Leaf list) = Leaf list
+getSubTreeByIndex num (Node list) = (\tree -> case tree of
+                                        (subTree, num) -> subTree
+                                    ) $ last $ filter (\node -> case node of
+                                         (subTree, index) -> index <= num
+                                    ) list
+
+cont :: Ord a => a -> IndexedTree a -> Bool
+cont num (Leaf list) = elem num list
+cont num tree = cont num $ getSubTreeByIndex num tree
+
+-- Added By Tanmaya
 contains :: Ord a => a -> IndexedTree a -> Bool
 contains e (Leaf xs) = elem e xs
 contains e (Node x) = (\node ->  case node of
                                 ((leaf1,index1):[]) -> contains e leaf1 
-				((leaf1,index1):(leaf2,index2):[]) -> if e > index1 && e < index2 then contains e leaf1 else contains e (Node((leaf2, index2):[]))
-				((leaf1,index1):(leaf2,index2):xss) -> if e > index1 && e < index2 then contains e leaf1 else contains e (Node((leaf2, index2):xss))
-			      ) x     
-                                           
-                                           
+                                ((leaf1,index1):(leaf2,index2):[]) -> if e > index1 && e < index2 then contains e leaf1 else contains e (Node((leaf2, index2):[]))
+                                ((leaf1,index1):(leaf2,index2):xss) -> if e > index1 && e < index2 then contains e leaf1 else contains e (Node((leaf2, index2):xss))
+                      ) x
 
 
-forEachTwoElements :: (a -> a -> b) -> [a] -> [b]
-forEachTwoElements fn [] = []
-forEachTwoElements fn (x:[]) = []
-forEachTwoElements fn (x:xs:xss) = fn x xs : forEachTwoElements fn (xs:xss)
-
-main = print $ contains 22 myTree
+main = print $ cont 1102 myTree
