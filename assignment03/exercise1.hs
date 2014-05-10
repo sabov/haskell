@@ -13,20 +13,21 @@ countList from to = [from..to] ++ countList from to
 
 -- Ex2
 
-cantorList :: Int -> Int -> [Int]
-cantorList sign to | sign > 0 = [1..to] ++ cantorList sign (to + 1)
-                   | otherwise = reverse [1..to] ++ cantorList sign (to + 1)
+cantorNumeratorList :: Int -> [Int]
+cantorNumeratorList to = [1..to] ++ cantorNumeratorList (succ to)
 
-cantorRatList :: Int -> [Ratio Int]
-cantorRatList index = if gcd a b > 1 then cantorRatList (index + 1)
-                                     else a % b : cantorRatList (index + 1)
-                                     where
-                                         a = cantorList 1 1 !! (index - 1)
-                                         b = cantorList (-1) 1 !! (index - 1)
+cantorDenominatorList :: Int -> [Int]
+cantorDenominatorList to = reverse [1..to] ++ cantorDenominatorList (succ to)
+
+cantorList :: Int -> [Ratio Int]
+cantorList index = if gcd a b > 1 then cantorList $ succ index
+                                  else a % b : cantorList (succ index)
+                                  where
+                                      a = cantorNumeratorList 1 !! pred index
+                                      b = cantorDenominatorList 1 !! pred index
 
 cantor :: Int -> Ratio Int
-cantor index = cantorRatList 1 !! (index - 1)
+cantor index = cantorList 1 !! pred index
 
 --main = print $ count 3 ["Petro", "Frank", "Sandra", "Caro", "Max"]
---main = print $ take 10 $ zip (cantorList 1 1) (cantorList (-1) 1)
-main = print $ cantor 15
+main = print $ cantor 2 == 1 % 2
