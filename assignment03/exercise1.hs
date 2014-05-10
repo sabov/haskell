@@ -17,5 +17,16 @@ cantorList :: Int -> Int -> [Int]
 cantorList sign to | sign > 0 = [1..to] ++ cantorList sign (to + 1)
                    | otherwise = reverse [1..to] ++ cantorList sign (to + 1)
 
+cantorRatList :: Int -> [Ratio Int]
+cantorRatList index = if gcd a b > 1 then cantorRatList (index + 1)
+                                     else a % b : cantorRatList (index + 1)
+                                     where
+                                         a = cantorList 1 1 !! (index - 1)
+                                         b = cantorList (-1) 1 !! (index - 1)
+
+cantor :: Int -> Ratio Int
+cantor index = cantorRatList 1 !! (index - 1)
+
 --main = print $ count 3 ["Petro", "Frank", "Sandra", "Caro", "Max"]
-main = print $ take 10 $ zip (cantorList 1 1) (cantorList (-1) 1)
+--main = print $ take 10 $ zip (cantorList 1 1) (cantorList (-1) 1)
+main = print $ cantor 15
