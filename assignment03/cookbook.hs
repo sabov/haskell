@@ -8,11 +8,11 @@ main = do
   if (null recipes) then putStrLn "No recipes available..."
   else do
     promptForInput recipes
-    meal <- readInput recipes
-    if (isExitCommand meal) then putStrLn "Leaving, good bye..."
-    else do
-      showRecipe meal
-      main
+    --meal <- readInput recipes
+    --if (isExitCommand meal) then putStrLn "Leaving, good bye..."
+    --else do
+      --showRecipe meal
+      --main
 
 findRecipes :: IO [String]
 findRecipes = do
@@ -28,10 +28,14 @@ removeEnding str = takeWhile (/='.') str
 -- list all available meals and ask the user to input the name of the
 -- desired meal
 promptForInput :: [String] -> IO ()
-promptForInput recipes = -- TODO
+promptForInput recipes = do
+    putStr "Available recipes: "
+    putStrLn $ intercalate ", " recipes
+    putStrLn "What do you want to cook?"
 
 -- reads the input from the user until he either inputs the name of an
 -- existing meal or an exit command (see isExitCommand)
+{-
 readInput :: [String] -> IO String
 readInput recipes = do
   -- TODO read the name of the meal from the command line
@@ -42,10 +46,11 @@ readInput recipes = do
     promptForInput recipes
     readInput recipes
   else -- TODO
+-}
 
 isExitCommand :: String -> Bool
 isExitCommand cmd = (map toLower cmd) `elem` ["quit", "exit", "q", "e"]
 
 -- print the recipe with the given name on the command line
-showRecipe :: String -> IO ()
-showRecipe meal = -- TODO
+--showRecipe :: String -> IO ()
+--showRecipe meal = -- TODO
