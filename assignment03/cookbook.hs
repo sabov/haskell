@@ -9,11 +9,10 @@ main = do
   else do
     promptForInput recipes
     meal <- readInput recipes
-    putStrLn meal
-    --if (isExitCommand meal) then putStrLn "Leaving, good bye..."
-    --else do
-      --showRecipe meal
-      --main
+    if (isExitCommand meal) then putStrLn "Leaving, good bye..."
+    else do
+      showRecipe meal
+      main
 
 findRecipes :: IO [String]
 findRecipes = do
@@ -39,7 +38,6 @@ promptForInput recipes = do
 readInput :: [String] -> IO String
 readInput recipes = do
   meal <- getLine
-  putStrLn meal
   if (not (meal `elem` recipes) && not (isExitCommand meal))
   then do
     putStrLn "I do not know a recipe for this meal, try again..."
@@ -52,5 +50,9 @@ isExitCommand :: String -> Bool
 isExitCommand cmd = (map toLower cmd) `elem` ["quit", "exit", "q", "e"]
 
 -- print the recipe with the given name on the command line
---showRecipe :: String -> IO ()
---showRecipe meal = -- TODO
+showRecipe :: String -> IO ()
+showRecipe meal = do
+    file <- readFile $ meal ++ ending
+    putStrLn "==========================================="
+    putStrLn file
+    putStrLn "==========================================="
