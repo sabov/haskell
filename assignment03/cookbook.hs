@@ -8,7 +8,8 @@ main = do
   if (null recipes) then putStrLn "No recipes available..."
   else do
     promptForInput recipes
-    --meal <- readInput recipes
+    meal <- readInput recipes
+    putStrLn meal
     --if (isExitCommand meal) then putStrLn "Leaving, good bye..."
     --else do
       --showRecipe meal
@@ -35,18 +36,17 @@ promptForInput recipes = do
 
 -- reads the input from the user until he either inputs the name of an
 -- existing meal or an exit command (see isExitCommand)
-{-
 readInput :: [String] -> IO String
 readInput recipes = do
-  -- TODO read the name of the meal from the command line
-  -- the result should be available in the variable 'meal'
+  meal <- getLine
+  putStrLn meal
   if (not (meal `elem` recipes) && not (isExitCommand meal))
   then do
     putStrLn "I do not know a recipe for this meal, try again..."
     promptForInput recipes
     readInput recipes
-  else -- TODO
--}
+  else
+    return meal
 
 isExitCommand :: String -> Bool
 isExitCommand cmd = (map toLower cmd) `elem` ["quit", "exit", "q", "e"]
